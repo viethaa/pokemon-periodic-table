@@ -1,0 +1,626 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+/* === Pokémon Periodic Table (footer + centered atomic weight) === */
+
+/* 1) Base vars */
+:root{
+  --bg:#070a0f; --panel:#0f1520; --ink:#e8f1ff; --muted:#9fb0c3; --accent:#5dd3ff; --ring:0 10px 30px rgba(0,0,0,.55);
+  --family-alkali:#ff6b6b; --family-alkaline:#ffa94d; --family-lanth:#9c6bff; --family-actin:#7a5cff; --family-transition:#5dd3ff; --family-post:#61e7c8; --family-metalloid:#b8f25a; --family-nonmetal:#e2e8f0; --family-halogen:#fbbf24; --family-noble:#8a5dff;
+  --gap:16px;
+  --cell:60px;
+}
+*{box-sizing:border-box}
+
+/* 2) Background */
+html,body{
+  margin:0; color:var(--ink);
+  font-family:'Plus Jakarta Sans', ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased; text-rendering: optimizeLegibility;
+  background:
+    radial-gradient(1200px 800px at 20% -10%, #14161b 0%, rgba(0,0,0,0) 60%),
+    radial-gradient(900px 700px at 110% 10%, #101319 0%, rgba(0,0,0,0) 55%),
+    linear-gradient(180deg, #0a0b0d 0%, #07090d 30%, #000 100%);
+  background-color:#000;
+  background-attachment: fixed, fixed, fixed;
+  background-blend-mode: screen, screen, normal;
+}
+
+/* Page layout: footer at end with breathing space; scroll allowed but scrollbar hidden */
+html{
+  height:100%;
+  overflow-y:auto;
+  overflow-x:hidden;
+  overscroll-behavior:none;
+  -ms-overflow-style:none;
+  scrollbar-width:none;
+}
+html::-webkit-scrollbar{ display:none }
+
+body{
+  min-height:100vh;
+  display:flex; flex-direction:column;
+  overflow-x:hidden;
+}
+
+/* 3) Grid container */
+main{max-width:1280px; margin:32px auto 0; padding:0 16px; flex:1 0 auto}
+.ptable{
+  display:grid;
+  grid-template-columns: repeat(18, var(--cell));
+  grid-auto-rows: calc(var(--cell) * 1.7 + 24px);
+  gap: clamp(6px, var(--gap), 16px);
+  padding: 6px;
+  align-items: stretch;
+}
+
+/* 4) Cell visuals */
+.cell{
+  position:relative;
+  display:flex;
+  align-items:center;
+  justify-content:center;
+  background:linear-gradient(180deg,#10172a,#0c1322);
+  border:1px solid rgba(255,255,255,.08);
+  border-radius:10px;
+  height: 100%; min-height: 0;
+  padding:10px;
+  box-shadow:var(--ring);
+  transition:transform .15s ease, box-shadow .2s ease;
+  cursor:pointer;
+  color:var(--ink);
+  isolation:isolate;
+  will-change: transform;
+}
+.cell:hover{ transform: translateY(-2px); z-index:5; }
+
+/* center sprite container */
+.cell .inner{
+  display:flex; flex-direction:column; align-items:center; justify-content:center;
+  width:100%; height:100%; gap:6px;
+}
+
+/* Centered atomic weight above sprite */
+.meta{
+  position:static;
+  display:block;
+  text-align:center;
+  font-variant-numeric:tabular-nums;
+  margin-bottom:2px;
+}
+.z{ font-size:11px; color:var(--muted) }
+.mass{ display:none }
+.sprite{ position:relative; z-index:2; width:min(80px, calc(var(--cell)*0.9)); height:min(80px, calc(var(--cell)*0.9)); image-rendering:pixelated; filter: drop-shadow(0 10px 18px rgba(0,0,0,.65)); display:block; pointer-events:none }
+.symbol{ display:none !important }
+
+/* 5) Element name gradient */
+.ename{
+  margin-top:2px;
+  font-size:clamp(16px, calc(var(--cell)*0.38), 24px);
+  font-weight:800; letter-spacing:.4px;
+  background: linear-gradient(180deg, #f6f7f9 0%, #d9dee6 55%, #b3bac6 100%);
+  -webkit-background-clip:text; background-clip:text;
+  -webkit-text-fill-color:transparent; color:transparent;
+  text-shadow: 0 0.5px 0 rgba(0,0,0,.35), 0 1px 6px rgba(0,0,0,.35);
+}
+
+/* header/footer basics */
+header{position:static; z-index:10; background:transparent; border-bottom:none}
+.wrap{max-width:1280px; margin:0 auto; padding:14px 16px}
+.titlebar{display:flex; align-items:center; justify-content:space-between; gap:16px; flex-wrap:wrap}
+.brand{display:flex; align-items:center; gap:10px}
+.brand .ball{width:28px; height:28px; display:grid; place-items:center; border-radius:999px; background:#0b0f14; border:1px solid rgba(255,255,255,.16); box-shadow:inset 0 0 0 2px rgba(255,255,255,.85), 0 6px 16px rgba(0,0,0,.45)}
+.brand .ball svg{width:18px; height:18px; display:block}
+.brand h1{
+  margin:0;
+  font-size:clamp(20px,2.6vw,32px);
+  font-weight:700;
+  letter-spacing:.2px;
+  font-family:'Plus Jakarta Sans', ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+}
+.search{display:flex; gap:10px; min-width:260px}
+.search input{flex:1; background:rgba(255,255,255,.03); border:1px solid rgba(255,255,255,.95); color:var(--ink); border-radius:10px; padding:10px 12px; outline:none; box-shadow:0 1px 0 rgba(255,255,255,.08) inset}
+.search input:focus{border-color:#fff; box-shadow:0 0 0 3px rgba(255,255,255,.18), 0 0 0 1px #fff}
+
+/* Footer at end, with top & bottom breathing space */
+footer{
+  flex-shrink:0;
+  width:100%;
+  margin-top:24px;
+  padding:12px 0 24px;
+  color:var(--muted);
+  text-align:center;
+  display:block;
+}
+footer .footrule{
+  height:1px;
+  margin:0 auto 8px;
+  max-width:400px;
+  background:linear-gradient(90deg, transparent 0, rgba(255,255,255,.12) 12%, rgba(255,255,255,.12) 88%, transparent 100%)
+}
+footer small{ display:block; margin:0 }
+
+/* hovercard + type styles */
+.hovercard{ position:absolute; top:100%; left:50%; transform:translate(-50%,10px); width:320px; background:#0c121c; border:1px solid rgba(255,255,255,.08); border-radius:14px; padding:12px; box-shadow:0 14px 40px rgba(0,0,0,.6); opacity:0; pointer-events:none; transition:opacity .16s ease, transform .16s ease; z-index:30 }
+.cell:hover .hovercard, .cell:focus-within .hovercard, .cell.show .hovercard{ opacity:1; transform:translate(-50%,6px); pointer-events:auto }
+.hovercard .hrow{ display:flex; align-items:center; justify-content:space-between; gap:12px; margin-bottom:8px }
+.hovercard .hname{ font-weight:700; font-size:14px; letter-spacing:.2px }
+.hovercard .chip{ font-size:12px; padding:4px 8px; border-radius:999px; background:#0b111a; border:1px solid rgba(255,255,255,.10) }
+.hovercard .divider{ height:1px; background:linear-gradient(90deg,transparent,rgba(255,255,255,.08),transparent); margin:6px 0 10px }
+.hovercard .grid{ display:grid; grid-template-columns:1fr 1fr; gap:8px 14px; font-size:12px }
+.hovercard .typerow{ grid-column:1/-1; text-align:center }
+.hovercard .typerow small{ display:block; margin-bottom:4px }
+.hovercard small{ color:var(--muted) }
+
+/* type pills */
+.typebar{ display:flex; flex-wrap:wrap; gap:6px; margin-top:4px; justify-content:center }
+.type{ font-size:11px; padding:3px 10px; border-radius:999px; border:1px solid rgba(255,255,255,.18); background:rgba(255,255,255,.06); color:#ffffff !important; letter-spacing:.2px }
+.t-Normal{ background:linear-gradient(135deg, rgba(168,167,122,.42), rgba(168,167,122,.18)); border-color:rgba(168,167,122,.60) }
+.t-Fire{ background:linear-gradient(135deg, rgba(238,129,48,.42), rgba(238,129,48,.18)); border-color:rgba(238,129,48,.60) }
+.t-Water{ background:linear-gradient(135deg, rgba(99,144,240,.42), rgba(99,144,240,.18)); border-color:rgba(99,144,240,.60) }
+.t-Electric{ background:linear-gradient(135deg, rgba(247,208,44,.42), rgba(247,208,44,.18)); border-color:rgba(247,208,44,.60) }
+.t-Grass{ background:linear-gradient(135deg, rgba(122,199,76,.42), rgba(122,199,76,.18)); border-color:rgba(122,199,76,.60) }
+.t-Ice{ background:linear-gradient(135deg, rgba(150,217,214,.42), rgba(150,217,214,.18)); border-color:rgba(150,217,214,.60) }
+.t-Fighting{ background:linear-gradient(135deg, rgba(194,46,40,.42), rgba(194,46,40,.18)); border-color:rgba(194,46,40,.60) }
+.t-Poison{ background:linear-gradient(135deg, rgba(163,62,161,.42), rgba(163,62,161,.18)); border-color:rgba(163,62,161,.60) }
+.t-Ground{ background:linear-gradient(135deg, rgba(226,191,101,.42), rgba(226,191,101,.18)); border-color:rgba(226,191,101,.60) }
+.t-Flying{ background:linear-gradient(135deg, rgba(169,143,243,.42), rgba(169,143,243,.18)); border-color:rgba(169,143,243,.60) }
+.t-Psychic{ background:linear-gradient(135deg, rgba(249,85,135,.42), rgba(249,85,135,.18)); border-color:rgba(249,85,135,.60) }
+.t-Bug{ background:linear-gradient(135deg, rgba(166,185,26,.42), rgba(166,185,26,.18)); border-color:rgba(166,185,26,.60) }
+.t-Rock{ background:linear-gradient(135deg, rgba(182,161,54,.42), rgba(182,161,54,.18)); border-color:rgba(182,161,54,.60) }
+.t-Ghost{ background:linear-gradient(135deg, rgba(115,87,151,.42), rgba(115,87,151,.18)); border-color:rgba(115,87,151,.60) }
+.t-Dragon{ background:linear-gradient(135deg, rgba(111,53,252,.42), rgba(111,53,252,.18)); border-color:rgba(111,53,252,.60) }
+.t-Dark{ background:linear-gradient(135deg, rgba(112,87,70,.42), rgba(112,87,70,.18)); border-color:rgba(112,87,70,.60) }
+.t-Steel{ background:linear-gradient(135deg, rgba(183,183,206,.42), rgba(183,183,206,.18)); border-color:rgba(183,183,206,.60) }
+.t-Fairy{ background:linear-gradient(135deg, rgba(214,133,173,.42), rgba(214,133,173,.18)); border-color:rgba(214,133,173,.60) }
+</style>
+</head>
+<body>
+<header>
+  <div class="wrap titlebar">
+    <div class="brand">
+      <span class="ball" aria-hidden="true">
+        <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <circle cx="12" cy="12" r="10" fill="#e6e6e6"/>
+          <path d="M2 12h20" stroke="#0b0f14" stroke-width="2"/>
+          <path d="M12 2a10 10 0 0 1 10 10H2A10 10 0 0 1 12 2z" fill="#ff2d2d"/>
+          <circle cx="12" cy="12" r="4" fill="#0b0f14"/>
+          <circle cx="12" cy="12" r="2" fill="#e6e6e6"/>
+        </svg>
+      </span>
+      <h1>Pokémon Periodic Table</h1>
+    </div>
+    <div class="search"><input id="q" placeholder="Search element or Pokémon" aria-label="Search"/></div>
+  </div>
+</header>
+
+<main>
+  <div class="ptable" id="ptable"></div>
+  <div class="ptable" id="fblock" style="margin-top: calc(var(--gap) * 1.5)"></div>
+</main>
+
+<footer>
+  <div class="footrule"></div>
+  <small>© 2025 Ha Bach Viet. All rights reserved.</small>
+</footer>
+
+<script>
+// === Elements 1–118 ===
+const csv = `z,symbol,name,group,period,weight,family
+1,H,Hydrogen,1,1,1.008,nonmetal
+2,He,Helium,18,1,4.003,noble
+3,Li,Lithium,1,2,6.94,alkali
+4,Be,Beryllium,2,2,9.012,alkaline
+5,B,Boron,13,2,10.81,metalloid
+6,C,Carbon,14,2,12.01,nonmetal
+7,N,Nitrogen,15,2,14.01,nonmetal
+8,O,Oxygen,16,2,16.00,nonmetal
+9,F,Fluorine,17,2,19.00,halogen
+10,Ne,Neon,18,2,20.18,noble
+11,Na,Sodium,1,3,22.99,alkali
+12,Mg,Magnesium,2,3,24.31,alkaline
+13,Al,Aluminium,13,3,26.98,post
+14,Si,Silicon,14,3,28.09,metalloid
+15,P,Phosphorus,15,3,30.97,nonmetal
+16,S,Sulfur,16,3,32.06,nonmetal
+17,Cl,Chlorine,17,3,35.45,halogen
+18,Ar,Argon,18,3,39.95,noble
+19,K,Potassium,1,4,39.10,alkali
+20,Ca,Calcium,2,4,40.08,alkaline
+21,Sc,Scandium,3,4,44.96,transition
+22,Ti,Titanium,4,4,47.87,transition
+23,V,Vanadium,5,4,50.94,transition
+24,Cr,Chromium,6,4,52.00,transition
+25,Mn,Manganese,7,4,54.94,transition
+26,Fe,Iron,8,4,55.85,transition
+27,Co,Cobalt,9,4,58.93,transition
+28,Ni,Nickel,10,4,58.69,transition
+29,Cu,Copper,11,4,63.55,transition
+30,Zn,Zinc,12,4,65.38,transition
+31,Ga,Gallium,13,4,69.72,post
+32,Ge,Germanium,14,4,72.63,metalloid
+33,As,Arsenic,15,4,74.92,metalloid
+34,Se,Selenium,16,4,78.97,nonmetal
+35,Br,Bromine,17,4,79.90,halogen
+36,Kr,Krypton,18,4,83.80,noble
+37,Rb,Rubidium,1,5,85.47,alkali
+38,Sr,Strontium,2,5,87.62,alkaline
+39,Y,Yttrium,3,5,88.91,transition
+40,Zr,Zirconium,4,5,91.22,transition
+41,Nb,Niobium,5,5,92.91,transition
+42,Mo,Molybdenum,6,5,95.95,transition
+43,Tc,Technetium,7,5,98,transition
+44,Ru,Ruthenium,8,5,101.07,transition
+45,Rh,Rhodium,9,5,102.91,transition
+46,Pd,Palladium,10,5,106.42,transition
+47,Ag,Silver,11,5,107.87,transition
+48,Cd,Cadmium,12,5,112.41,transition
+49,In,Indium,13,5,114.82,post
+50,Sn,Tin,14,5,118.71,post
+51,Sb,Antimony,15,5,121.76,metalloid
+52,Te,Tellurium,16,5,127.60,metalloid
+53,I,Iodine,17,5,126.90,halogen
+54,Xe,Xenon,18,5,131.29,noble
+55,Cs,Cesium,1,6,132.91,alkali
+56,Ba,Barium,2,6,137.33,alkaline
+57,La,Lanthanum,3,6,138.91,lanth
+58,Ce,Cerium,3,6,140.12,lanth
+59,Pr,Praseodymium,3,6,140.91,lanth
+60,Nd,Neodymium,3,6,144.24,lanth
+61,Pm,Promethium,3,6,145,lanth
+62,Sm,Samarium,3,6,150.36,lanth
+63,Eu,Europium,3,6,151.96,lanth
+64,Gd,Gadolinium,3,6,157.25,lanth
+65,Tb,Terbium,3,6,158.93,lanth
+66,Dy,Dysprosium,3,6,162.50,lanth
+67,Ho,Holmium,3,6,164.93,lanth
+68,Er,Erbium,3,6,167.26,lanth
+69,Tm,Thulium,3,6,168.93,lanth
+70,Yb,Ytterbium,3,6,173.05,lanth
+71,Lu,Lutetium,3,6,174.97,lanth
+72,Hf,Hafnium,4,6,178.49,transition
+73,Ta,Tantalum,5,6,180.95,transition
+74,W,Tungsten,6,6,183.84,transition
+75,Re,Rhenium,7,6,186.21,transition
+76,Os,Osmium,8,6,190.23,transition
+77,Ir,Iridium,9,6,192.22,transition
+78,Pt,Platinum,10,6,195.08,transition
+79,Au,Gold,11,6,196.97,transition
+80,Hg,Mercury,12,6,200.59,transition
+81,Tl,Thallium,13,6,204.38,post
+82,Pb,Lead,14,6,207.2,post
+83,Bi,Bismuth,15,6,208.98,post
+84,Po,Polonium,16,6,209,post
+85,At,Astatine,17,6,210,halogen
+86,Rn,Radon,18,6,222,noble
+87,Fr,Francium,1,7,223,alkali
+88,Ra,Radium,2,7,226,alkaline
+89,Ac,Actinium,3,7,227,actin
+90,Th,Thorium,3,7,232.04,actin
+91,Pa,Protactinium,3,7,231.04,actin
+92,U,Uranium,3,7,238.03,actin
+93,Np,Neptunium,3,7,237,actin
+94,Pu,Plutonium,3,7,244,actin
+95,Am,Americium,3,7,243,actin
+96,Cm,Curium,3,7,247,actin
+97,Bk,Berkelium,3,7,247,actin
+98,Cf,Californium,3,7,251,actin
+99,Es,Einsteinium,3,7,252,actin
+100,Fm,Fermium,3,7,257,actin
+101,Md,Mendelevium,3,7,258,actin
+102,No,Nobelium,3,7,259,actin
+103,Lr,Lawrencium,3,7,266,actin
+104,Rf,Rutherfordium,4,7,267,transition
+105,Db,Dubnium,5,7,268,transition
+106,Sg,Seaborgium,6,7,269,transition
+107,Bh,Bohrium,7,7,270,transition
+108,Hs,Hassium,8,7,277,transition
+109,Mt,Meitnerium,9,7,278,transition
+110,Ds,Darmstadtium,10,7,281,transition
+111,Rg,Roentgenium,11,7,282,transition
+112,Cn,Copernicium,12,7,285,transition
+113,Nh,Nihonium,13,7,286,post
+114,Fl,Flerovium,14,7,289,post
+115,Mc,Moscovium,15,7,290,post
+116,Lv,Livermorium,16,7,293,post
+117,Ts,Tennessine,17,7,294,halogen
+118,Og,Oganesson,18,7,294,noble`;
+
+// families map
+const families = {
+  alkali:'var(--family-alkali)',
+  alkaline:'var(--family-alkaline)',
+  transition:'var(--family-transition)',
+  post:'var(--family-post)',
+  metalloid:'var(--family-metalloid)',
+  nonmetal:'var(--family-nonmetal)',
+  halogen:'var(--family-halogen)',
+  noble:'var(--family-noble)',
+  lanth:'var(--family-lanth)',
+  actin:'var(--family-actin)'
+};
+
+// helpers
+function parseCSV(txt){
+  const [header,...rows]=txt.trim().split(/\r?\n+/);
+  const keys=header.split(',');
+  return rows.map(r=>{
+    const v=r.split(',');
+    const o={}; keys.forEach((k,i)=>o[k]=isNaN(+v[i])?v[i]:+v[i]);
+    return o;
+  });
+}
+const ELEMENTS = parseCSV(csv);
+
+// Pokémon mapping
+const POKE_OVERRIDES = {
+  Fe:{dex:212,name:'Scizor',reason:'Iron → steel bug armor.'}, Cu:{dex:879,name:'Copperajah',reason:'Copper elephant.'},
+  Au:{dex:250,name:'Ho-Oh',reason:'Golden plumage.'}, Hg:{dex:808,name:'Meltan',reason:'Liquid metal vibe.'},
+  I:{dex:686,name:'Inkay',reason:'Inky iodine.'}, Xe:{dex:716,name:'Xerneas',reason:'Xenon “X”.'}, W:{dex:202,name:'Wobbuffet',reason:'W-symbol tungsten.'},
+  Pt:{dex:487,name:'Giratina',reason:'Pokémon Platinum mascot.'}, Rn:{dex:93,name:'Haunter',reason:'Invisible noble gas spook.'},
+  Br:{dex:286,name:'Breloom',reason:'Br pun.'}, Se:{dex:336,name:'Seviper',reason:'Se pun.'}, Ge:{dex:94,name:'Gengar',reason:'Ge pun + semiconductors.'},
+  Ga:{dex:445,name:'Garchomp',reason:'Liquid-metal metaphor.'}, Ni:{dex:38,name:'Ninetales',reason:'“Ni” → Nine.'}, Co:{dex:839,name:'Coalossal',reason:'Industrial cobalt.'}, Zn:{dex:335,name:'Zangoose',reason:'Zn letter match.'},
+  Pb:{dex:476,name:'Probopass',reason:'Pb pun; heavy.'}, Kr:{dex:553,name:'Krookodile',reason:'Kr letters.'}, Na:{dex:25,name:'Pikachu',reason:'Salts & batteries.'},
+  H:{dex:134,name:'Vaporeon',reason:'Hydrogen → water theme.'}, He:{dex:425,name:'Drifloon',reason:'Balloon lightness.'}, C:{dex:133,name:'Eevee',reason:'Many forms like carbon.'}, Cl:{dex:109,name:'Koffing',reason:'Gas hazard.'}, Ar:{dex:143,name:'Snorlax',reason:'Inert noble.'}
+};
+const FAMILY_POOLS = {
+  alkali:[100,101,25,311,312,417,587,777,923],
+  alkaline:[95,111,185,74,75,76,306,208,246],
+  transition:[81,82,462,212,208,303,306,376,625,681,879,863,379,448,823,884],
+  post:[436,437,476,600,601,808,809,569,707],
+  metalloid:[137,233,474,479,352,649],
+  nonmetal:[1,43,44,45,46,47,69,70,71,285,286],
+  halogen:[109,110,88,89,336,454,758,435,569],
+  noble:[143,289,80,199,213,202],
+  lanth:[374,375,376,385,338,337,343,344,437,120,121,379,448,442,487],
+  actin:[92,93,94,563,609,425,426,355,356,477,442,487,807,793,199]
+};
+const FAMILY_REASON = {
+  alkali:'Explosive/reactive → electric/charged Pokémon.',
+  alkaline:'Earthy reactive metals → rock/ground toughness.',
+  transition:'Metallic d-block → Steel-type/armored Pokémon.',
+  post:'Softer metals → industrial/mechanical Pokémon.',
+  metalloid:'In-between behavior → digital/tech Pokémon.',
+  nonmetal:'Life/organic chemistry → plants/organics.',
+  halogen:'Highly reactive gases → poison/toxic themes.',
+  noble:'Inert nobles → chill/stoic Pokémon.',
+  lanth:'Rare earths → cosmic/psychic/ancient vibes.',
+  actin:'Radioactive series → ghostly/unstable power.'
+};
+
+function getFamilyColor(f){ return families[f] || '#2b3344'; }
+function spriteUrl(id){ return `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`; }
+
+// build unique assignments
+const DEX_POOL = Array.from({length:1025}, (_,i)=> i+1);
+let POKE_ASSIGNMENTS = null;
+function assignAllPokemon(){
+  if(POKE_ASSIGNMENTS) return;
+  POKE_ASSIGNMENTS = {};
+  const used = new Set();
+  const byZ = [...ELEMENTS].sort((a,b)=>a.z-b.z);
+  for(const [sym,ov] of Object.entries(POKE_OVERRIDES)){
+    if(!used.has(ov.dex)){ POKE_ASSIGNMENTS[sym] = ov; used.add(ov.dex); }
+  }
+  function nextFrom(arr, seed){
+    if(!arr || !arr.length) return null;
+    for(let i=0;i<arr.length;i++){
+      const id = arr[(seed+i)%arr.length];
+      if(!used.has(id)) return id;
+    }
+    return null;
+  }
+  function nextGlobal(seed){
+    for(let i=0;i<DEX_POOL.length;i++){
+      const id = DEX_POOL[(seed+i)%DEX_POOL.length];
+      if(!used.has(id)) return id;
+    }
+    return 1;
+  }
+  for(const el of byZ){
+    if(POKE_ASSIGNMENTS[el.symbol]) continue;
+    const pool = FAMILY_POOLS[el.family] || [];
+    const seed = el.z * 7;
+    let id = nextFrom(pool, seed);
+    if(id==null) id = nextGlobal(seed);
+    POKE_ASSIGNMENTS[el.symbol] = { dex:id, name:'', reason:`Matched by family: ${el.family}. ${FAMILY_REASON[el.family]||''}` };
+    used.add(id);
+  }
+}
+function getPokemonFor(el){ assignAllPokemon(); return POKE_ASSIGNMENTS[el.symbol]; }
+
+// lazy-load types
+const TYPE_CACHE = {};
+function cap(s){ return s ? s.charAt(0).toUpperCase()+s.slice(1) : s; }
+async function fetchTypes(dex){
+  if(TYPE_CACHE[dex]) return TYPE_CACHE[dex];
+  const res = await fetch(`https://pokeapi.co/api/v2/pokemon/${dex}`);
+  if(!res.ok) throw new Error('type fetch failed');
+  const json = await res.json();
+  const types = json.types.sort((a,b)=>a.slot-b.slot).map(t=>cap(t.type.name));
+  TYPE_CACHE[dex] = types; return types;
+}
+function attachTypeLoader(cell, dex){
+  const bar = cell.querySelector('.typebar');
+  if(!bar) return;
+  const load = async ()=>{
+    if(bar.dataset.loaded) return;
+    try{ const types = await fetchTypes(dex);
+      bar.innerHTML = types.map(t=>`<span class="type t-${t}">${t}</span>`).join('');
+    }catch(err){ bar.innerHTML = '<span class="type">Unknown</span>'; }
+    bar.dataset.loaded = '1';
+  };
+  cell.addEventListener('mouseenter', load, {once:true});
+  cell.addEventListener('focusin', load, {once:true});
+}
+
+// responsive fit (width-based ONLY – preserves original card sizing)
+function fitGrid(){
+  const cols = 18; const pad = 32;
+  const base = Math.min(window.innerWidth, 1280) - pad;
+  const minGap = 6, maxGap = 16;
+  const t = Math.max(0, Math.min(1, (base - 720) / (1280 - 720)));
+  let gap = Math.round(minGap + (maxGap - minGap) * t);
+  let cell = Math.floor((base - (cols - 1) * gap) / cols);
+  if (cell < 34) { gap = Math.max(minGap, gap - 4); cell = Math.floor((base - (cols - 1) * gap) / cols); }
+  if (cell < 30) { gap = Math.max(minGap, gap - 2); cell = Math.floor((base - (cols - 1) * gap) / cols); }
+  if (cell < 26) { cell = 26; gap = Math.max(minGap, Math.floor((base - cols * cell) / (cols - 1))); }
+  document.documentElement.style.setProperty('--cell', cell + 'px');
+  document.documentElement.style.setProperty('--gap', gap + 'px');
+}
+window.addEventListener('resize', fitGrid);
+
+// render
+const mainGridEl = document.getElementById('ptable');
+const fGridEl = document.getElementById('fblock');
+function render(list=ELEMENTS){
+  mainGridEl.innerHTML = '';
+  fGridEl.innerHTML = '';
+
+  // main blocks (no lanth/actin)
+  list.filter(e=>e.family!=='lanth' && e.family!=='actin').forEach(el=>{
+    const pk = getPokemonFor(el, 0);
+    const cell = document.createElement('button');
+    cell.className='cell';
+    cell.style.gridColumn = el.group;
+    cell.style.gridRow = el.period;
+    cell.style.setProperty('--fc', getFamilyColor(el.family));
+    cell.innerHTML = `
+      <div class="inner">
+        <div class="meta"><span class="z">${el.weight}</span></div>
+        <img class="sprite" alt="sprite" loading="lazy" decoding="async" src="${spriteUrl(pk.dex)}" onerror="this.onerror=null; this.src='https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${pk.dex}.png'"/>
+        <span class="ename" title="${el.name}">${el.symbol}</span>
+      </div>
+      <div class="hovercard">
+        <div class="hrow">
+          <div class="hname">${el.name}</div>
+          <span class="chip">${el.symbol}</span>
+        </div>
+        <div class="divider"></div>
+        <div class="grid">
+          g
+          <div><small>Mass</small><div>${el.weight}</div></div>
+          <div><small>Period</small><div>${el.period}</div></div>
+          <div><small>Group</small><div>${el.group}</div></div>
+          <div style="grid-column:1/-1"><small>Pokémon</small><div>${pk.name||('Dex '+pk.dex)}</div></div>
+          <div class="typerow" style="grid-column:1/-1"><small>Type</small><div class="typebar" data-dex="${pk.dex}"><span class="type">Loading…</span></div></div>
+          <div style="grid-column:1/-1"><small>Why Pokémon</small><div>${(POKE_OVERRIDES[el.symbol]?.reason)||('Matched by family: '+el.family+'. '+(FAMILY_REASON[el.family]||''))}</div></div>
+        </div>
+      </div>`;
+    mainGridEl.appendChild(cell);
+    attachTypeLoader(cell, pk.dex);
+  });
+
+  // f-block rows
+  const lanths = list.filter(e=>e.family==='lanth');
+  lanths.forEach((el,i)=>{
+    const pk = getPokemonFor(el, i);
+    const cell = document.createElement('button');
+    cell.className='cell';
+    cell.style.setProperty('--fc', getFamilyColor(el.family));
+    cell.style.gridColumn = (i+4);
+    cell.innerHTML = `
+      <div class="inner">
+        <div class="meta"><span class="z">${el.weight}</span></div>
+        <img class="sprite" alt="sprite" loading="lazy" decoding="async" src="${spriteUrl(pk.dex)}" onerror="this.onerror=null; this.src='https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${pk.dex}.png'"/>
+        <span class="ename" title="${el.name}">${el.symbol}</span>
+      </div>
+      <div class="hovercard">
+        <div class="hrow">
+          <div class="hname">${el.name}</div>
+          <span class="chip">${el.symbol}</span>
+        </div>
+        <div class="divider"></div>
+        <div class="grid">
+          <div><small>Atomic #</small><div>${el.z}</div></div>
+          <div><small>Mass</small><div>${el.weight}</div></div>
+          <div><small>Period</small><div>${el.period}</div></div>
+          <div><small>Group</small><div>${el.group}</div></div>
+          <div style="grid-column:1/-1"><small>Pokémon</small><div>${pk.name||('Dex '+pk.dex)}</div></div>
+          <div class="typerow" style="grid-column:1/-1"><small>Type</small><div class="typebar" data-dex="${pk.dex}"><span class="type">Loading…</span></div></div>
+          <div style="grid-column:1/-1"><small>Why Pokémon</small><div>${(POKE_OVERRIDES[el.symbol]?.reason)||('Matched by family: '+el.family+'. '+(FAMILY_REASON[el.family]||''))}</div></div>
+        </div>
+      </div>`;
+    fGridEl.appendChild(cell);
+    attachTypeLoader(cell, pk.dex);
+  });
+
+  const actins = list.filter(e=>e.family==='actin');
+  actins.forEach((el,i)=>{
+    const pk = getPokemonFor(el, i);
+    const cell = document.createElement('button');
+    cell.className='cell';
+    cell.style.setProperty('--fc', getFamilyColor(el.family));
+    cell.style.gridColumn = (i+4);
+    cell.innerHTML = `
+      <div class="inner">
+        <div class="meta"><span class="z">${el.weight}</span></div>
+        <img class="sprite" alt="sprite" loading="lazy" decoding="async" src="${spriteUrl(pk.dex)}" onerror="this.onerror=null; this.src='https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${pk.dex}.png'"/>
+        <span class="ename" title="${el.name}">${el.symbol}</span>
+      </div>
+      <div class="hovercard">
+        <div class="hrow">
+          <div class="hname">${el.name}</div>
+          <span class="chip">${el.symbol}</span>
+        </div>
+        <div class="divider"></div>
+        <div class="grid">
+          <div><small>Atomic #</small><div>${el.z}</div></div>
+          <div><small>Mass</small><div>${el.weight}</div></div>
+          <div><small>Period</small><div>${el.period}</div></div>
+          <div><small>Group</small><div>${el.group}</div></div>
+          <div style="grid-column:1/-1"><small>Pokémon</small><div>${pk.name||('Dex '+pk.dex)}</div></div>
+          <div class="typerow" style="grid-column:1/-1"><small>Type</small><div class="typebar" data-dex="${pk.dex}"><span class="type">Loading…</span></div></div>
+          <div style="grid-column:1/-1"><small>Why Pokémon</small><div>${(POKE_OVERRIDES[el.symbol]?.reason)||('Matched by family: '+el.family+'. '+(FAMILY_REASON[el.family]||''))}</div></div>
+        </div>
+      </div>`;
+    fGridEl.appendChild(cell);
+    attachTypeLoader(cell, pk.dex);
+  });
+}
+
+// search
+const q = document.getElementById('q');
+q.addEventListener('input', e=>{
+  const term = e.target.value.trim().toLowerCase();
+  if(!term){ render(); fitGrid(); return; }
+  const subset = ELEMENTS.filter(el=>{
+    const ov = POKE_OVERRIDES[el.symbol];
+    const pnames = ov? (ov.name||'').toLowerCase() : '';
+    return el.symbol.toLowerCase().includes(term) || el.name.toLowerCase().includes(term) || String(el.z).includes(term) || pnames.includes(term);
+  });
+  render(subset);
+  fitGrid();
+});
+
+// boot
+assignAllPokemon();
+fitGrid();
+render();
+
+// click-to-pin hovercards
+;[mainGridEl, fGridEl].forEach(grid=>{ if(!grid) return;
+  grid.addEventListener('click', (e)=>{
+    const btn = e.target.closest('.cell');
+    if(!btn) return;
+    e.stopPropagation();
+    document.querySelectorAll('.cell.show').forEach(el=>{ if(el!==btn) el.classList.remove('show'); });
+    btn.classList.toggle('show');
+  });
+});
+document.addEventListener('click', ()=>{ document.querySelectorAll('.cell.show').forEach(el=>el.classList.remove('show')); });
+document.addEventListener('keydown', (e)=>{
+  if((e.key==='Enter'||e.key===' ') && document.activeElement?.classList.contains('cell')){
+    e.preventDefault();
+    document.activeElement.classList.toggle('show');
+  }
+});
+</script>
+</body>
+</html>
