@@ -22,7 +22,7 @@
 
   - A link to the creator’s Instagram profile.
 
-- 💊 **Version Pill** – A sleek version indicator now appears next to the title to easily track current app version (`v1.1.0`).
+- 💊 **Version Pill** – A sleek version indicator to easily track current app version (`v1.1.0`).
 
 #
 
