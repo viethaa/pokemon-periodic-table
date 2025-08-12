@@ -269,8 +269,32 @@
     .brand {
       display: flex;
       align-items: center;
-      gap: 10px
+      gap: 12px;
+      /* spacing between Pokéball, title, and pill */
     }
+
+    .version-pill {
+      padding: 4px 12px;
+      /* slightly bigger */
+      font-size: 12px;
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
+      font-weight: 500;
+      letter-spacing: 0.3px;
+
+      border-radius: 10px;
+      background: linear-gradient(#0d1117, #0d1117);
+      color: #e8f1ff;
+
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      /* subtle border */
+      box-shadow: 0 0 6px rgba(255, 255, 255, 0.05),
+        0 2px 6px rgba(0, 0, 0, 0.4);
+
+      white-space: nowrap;
+      opacity: 0.96;
+    }
+
+
 
     .brand .ball {
       width: 28px;
@@ -297,10 +321,23 @@
       font-family: 'Inter', ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
     }
 
+    /* Make the pill float left of the input without affecting layout */
     .search {
       display: flex;
-      gap: 10px;
-      min-width: 260px
+      align-items: center;
+      gap: 8px;
+      min-width: 260px;
+      position: relative;
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 10px;
+      display: flex;
+      align-items: center;
+      pointer-events: none;
+      /* so clicks go to input */
+      opacity: 0.7;
     }
 
     .search input {
@@ -309,15 +346,19 @@
       border: 1px solid rgba(255, 255, 255, .95);
       color: var(--ink);
       border-radius: 10px;
-      padding: 10px 12px;
+      padding: 10px 12px 10px 32px;
+      /* left padding for icon */
       outline: none;
-      box-shadow: 0 1px 0 rgba(255, 255, 255, .08) inset
+      box-shadow: 0 1px 0 rgba(255, 255, 255, .08) inset;
     }
+
 
     .search input:focus {
       border-color: #fff;
-      box-shadow: 0 0 0 3px rgba(255, 255, 255, .18), 0 0 0 1px #fff
+      box-shadow: 0 0 0 3px rgba(255, 255, 255, .18), 0 0 0 1px #fff;
     }
+
+
 
     /* Footer at end, with top & bottom breathing space */
     footer {
@@ -394,7 +435,7 @@
       border: 1px solid rgba(255, 255, 255, .08);
       border-radius: 14px;
       padding: 12px;
-      box-shadow: 0 14px 40px rgba(0, 0, 0, .6);
+      box-shadow: 0 14px 4.vers0px rgba(0, 0, 0, .6);
       opacity: 0;
       pointer-events: none;
       transition: opacity .16s ease, transform .16s ease;
@@ -583,8 +624,19 @@
           </svg>
         </span>
         <h1>Pokémon Periodic Table</h1>
+        <span class="version-pill">v1.1.0</span>
       </div>
-      <div class="search"><input id="q" placeholder="Search element or Pokémon" aria-label="Search" /></div>
+      <div class="search">
+        <span class="search-icon">
+          <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="white" viewBox="0 0 24 24">
+            <path
+              d="M10 2a8 8 0 105.293 14.293l4.854 4.854 1.414-1.414-4.854-4.854A8 8 0 0010 2zm0 2a6 6 0 110 12 6 6 0 010-12z" />
+          </svg>
+        </span>
+        <input id="q" placeholder="Search element or Pokémon" aria-label="Search" />
+      </div>
+
+
     </div>
   </header>
 
