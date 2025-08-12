@@ -1,7 +1,7 @@
 <div align="center">
   <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/5/51/Pokebola-pokeball-png-0.png/960px-Pokebola-pokeball-png-0.png" alt="Poké Ball" width="180" />
   <h1>Pokémon Periodic Table</h1>
-  <p><em>A clean, modern mash-up of chemistry and Pokémon — every element reimagined with a matching Pokémon.</em></p>
+  <p><em>"A clean, modern mash-up of chemistry and Pokémon — every element reimagined with a matching Pokémon."</em></p>
 </div>
 
 ---
