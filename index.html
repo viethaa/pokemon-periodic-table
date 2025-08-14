@@ -6,9 +6,10 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@500;600;700&display=swap" rel="stylesheet">
+  <!-- Match CSS font family -->
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;700;800&display=swap" rel="stylesheet">
   <style>
-    /* === Pokémon Periodic Table (sleeker column labels + extra top spacing) === */
+    /* === Pokémon Periodic Table (dark family gradients) === */
 
     /* 1) Base vars */
     :root {
@@ -31,12 +32,8 @@
       --gap: 16px;
       --cell: 60px;
       --colnum-gap: 14px;
-      /* extra space above cards for the column badge */
-      /* round pill */
       --colnum-pad-y: 4px;
-      /* taller pill */
       --colnum-pad-x: 10px;
-      --colnum-shadow: 0 6px 20px rgba(0, 0, 0, .25);
       --colnum-radius: 8px;
     }
 
@@ -53,15 +50,15 @@
       -webkit-font-smoothing: antialiased;
       text-rendering: optimizeLegibility;
       background:
-        radial-gradient(1200px 800px at 20% -10%, #14161b 0%, rgba(0, 0, 0, 0) 60%),
-        radial-gradient(900px 700px at 110% 10%, #101319 0%, rgba(0, 0, 0, 0) 55%),
-        linear-gradient(180deg, #0a0b0d 0%, #07090d 30%, #000 100%);
+        radial-gradient(1200px 800px at 20% -10%, #151821 0%, rgba(0, 0, 0, 0) 60%),
+        radial-gradient(900px 700px at 110% 10%, #0f1420 0%, rgba(0, 0, 0, 0) 55%),
+        linear-gradient(180deg, #0a0b0f 0%, #07090d 30%, #000 100%);
       background-color: #000;
       background-attachment: fixed, fixed, fixed;
       background-blend-mode: screen, screen, normal;
     }
 
-    /* Page layout: footer at end with breathing space; scroll allowed but scrollbar hidden */
+    /* Page layout */
     html {
       height: 100%;
       overflow-y: auto;
@@ -90,33 +87,33 @@
       flex: 1 0 auto
     }
 
-    /* ↑ was 32px; more top space */
     .ptable {
       display: grid;
       grid-template-columns: repeat(18, var(--cell));
       grid-auto-rows: calc(var(--cell) * 1.7 + 24px);
       gap: clamp(6px, var(--gap), 16px);
       padding: 10px;
-      /* a touch more internal breathing */
       align-items: stretch;
       position: relative;
-      /* for column number positioning */
     }
 
-    /* 4) Cell visuals */
+    /* 4) Cell visuals (now use per-family --g1/--g2) */
     .cell {
       position: relative;
       display: flex;
       align-items: center;
       justify-content: center;
-      background: linear-gradient(180deg, #10172a, #0c1322);
+
+      background:
+        linear-gradient(160deg, var(--g1, #0f1623), var(--g2, #0a0f17));
+
       border: 1px solid rgba(255, 255, 255, .08);
       border-radius: 10px;
       height: 100%;
       min-height: 0;
       padding: 10px;
       box-shadow: var(--ring);
-      transition: transform .15s ease, box-shadow .2s ease;
+      transition: transform .15s ease, box-shadow .2s ease, filter .2s ease;
       cursor: pointer;
       color: var(--ink);
       isolation: isolate;
@@ -126,9 +123,9 @@
     .cell:hover {
       transform: translateY(-2px);
       z-index: 5;
+      filter: saturate(1.08);
     }
 
-    /* center sprite container */
     .cell .inner {
       display: flex;
       flex-direction: column;
@@ -139,7 +136,7 @@
       gap: 6px;
     }
 
-    /* Centered atomic weight above sprite */
+    /* Atomic weight above sprite */
     .meta {
       position: static;
       display: block;
@@ -178,7 +175,7 @@
       font-size: clamp(16px, calc(var(--cell)*0.38), 24px);
       font-weight: 800;
       letter-spacing: .4px;
-      background: linear-gradient(180deg, #f6f7f9 0%, #d9dee6 55%, #b3bac6 100%);
+      background: linear-gradient(180deg, #eef2f7 0%, #cad3e0 55%, #a9b3c2 100%);
       -webkit-background-clip: text;
       background-clip: text;
       -webkit-text-fill-color: transparent;
@@ -186,6 +183,7 @@
       text-shadow: 0 0.5px 0 rgba(0, 0, 0, .35), 0 1px 6px rgba(0, 0, 0, .35);
     }
 
+    /* Column badges */
     .colnum {
       position: absolute;
       top: 0;
@@ -198,11 +196,8 @@
       padding: var(--colnum-pad-y) var(--colnum-pad-x);
       border-radius: var(--colnum-radius);
       border: 1px solid transparent;
-      /* lets the white border layer show */
       overflow: hidden;
-      /* ensures perfect clipping to radius */
 
-      /* Inner dark fill (on top) + solid white border (underneath) */
       background:
         linear-gradient(#0b0f14, #0b0f14) padding-box,
         linear-gradient(#ffffff, #ffffff) border-box;
@@ -219,13 +214,7 @@
       mix-blend-mode: normal;
     }
 
-
-
-
-
-
     .colnum>span {
-      /* bright white → silver gradient text (restored) */
       background: linear-gradient(180deg, #ffffff 0%, #e9eef7 55%, #cfd9ea 100%);
       -webkit-background-clip: text;
       background-clip: text;
@@ -234,7 +223,6 @@
       text-shadow: 0 .5px 0 rgba(0, 0, 0, .25);
     }
 
-    /* Fallback for older browsers without background-clip:text */
     @supports not (-webkit-background-clip: text) {
       .colnum>span {
         background: none;
@@ -242,7 +230,6 @@
         -webkit-text-fill-color: initial;
       }
     }
-
 
     /* header/footer basics */
     header {
@@ -270,31 +257,22 @@
       display: flex;
       align-items: center;
       gap: 12px;
-      /* spacing between Pokéball, title, and pill */
     }
 
     .version-pill {
       padding: 4px 12px;
-      /* slightly bigger */
       font-size: 12px;
       font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", monospace;
       font-weight: 500;
       letter-spacing: 0.3px;
-
       border-radius: 10px;
       background: linear-gradient(#0d1117, #0d1117);
       color: #e8f1ff;
-
       border: 1px solid rgba(255, 255, 255, 0.08);
-      /* subtle border */
-      box-shadow: 0 0 6px rgba(255, 255, 255, 0.05),
-        0 2px 6px rgba(0, 0, 0, 0.4);
-
+      box-shadow: 0 0 6px rgba(255, 255, 255, 0.05), 0 2px 6px rgba(0, 0, 0, 0.4);
       white-space: nowrap;
       opacity: 0.96;
     }
-
-
 
     .brand .ball {
       width: 28px;
@@ -318,10 +296,8 @@
       font-size: clamp(20px, 2.6vw, 24px);
       font-weight: 700;
       letter-spacing: .2px;
-      font-family: 'Inter', ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
     }
 
-    /* Make the pill float left of the input without affecting layout */
     .search {
       display: flex;
       align-items: center;
@@ -336,7 +312,6 @@
       display: flex;
       align-items: center;
       pointer-events: none;
-      /* so clicks go to input */
       opacity: 0.7;
     }
 
@@ -347,20 +322,16 @@
       color: var(--ink);
       border-radius: 10px;
       padding: 10px 12px 10px 32px;
-      /* left padding for icon */
       outline: none;
       box-shadow: 0 1px 0 rgba(255, 255, 255, .08) inset;
     }
-
 
     .search input:focus {
       border-color: #fff;
       box-shadow: 0 0 0 3px rgba(255, 255, 255, .18), 0 0 0 1px #fff;
     }
 
-
-
-    /* Footer at end, with top & bottom breathing space */
+    /* Footer */
     footer {
       flex-shrink: 0;
       width: 100%;
@@ -380,17 +351,16 @@
 
     footer small {
       display: block;
-      margin: 0;
+      margin: 0 0 4px 0;
       word-spacing: 1px;
-      margin-bottom: 4px;
     }
 
     .footer-icons {
       padding-top: 8px;
-      /* padding won’t collapse */
       display: flex;
       justify-content: center;
       gap: 24px;
+      margin-top: 10px;
     }
 
     .footer-icons .icon-box {
@@ -410,21 +380,7 @@
       transform: translateY(-2px);
     }
 
-    .icon-box:hover {
-      transform: translateY(-2px);
-    }
-
-    .footer-icons {
-      margin-top: 10px;
-      display: flex;
-      justify-content: center;
-      gap: 12px;
-    }
-
-
-
-
-    /* hovercard + type styles */
+    /* Hovercard */
     .hovercard {
       position: absolute;
       top: 100%;
@@ -435,7 +391,7 @@
       border: 1px solid rgba(255, 255, 255, .08);
       border-radius: 14px;
       padding: 12px;
-      box-shadow: 0 14px 4.vers0px rgba(0, 0, 0, .6);
+      box-shadow: 0 14px 40px rgba(0, 0, 0, .6);
       opacity: 0;
       pointer-events: none;
       transition: opacity .16s ease, transform .16s ease;
@@ -518,95 +474,24 @@
       letter-spacing: .2px
     }
 
-    .t-Normal {
-      background: linear-gradient(135deg, rgba(168, 167, 122, .42), rgba(168, 167, 122, .18));
-      border-color: rgba(168, 167, 122, .60)
-    }
-
-    .t-Fire {
-      background: linear-gradient(135deg, rgba(238, 129, 48, .42), rgba(238, 129, 48, .18));
-      border-color: rgba(238, 129, 48, .60)
-    }
-
-    .t-Water {
-      background: linear-gradient(135deg, rgba(99, 144, 240, .42), rgba(99, 144, 240, .18));
-      border-color: rgba(99, 144, 240, .60)
-    }
-
-    .t-Electric {
-      background: linear-gradient(135deg, rgba(247, 208, 44, .42), rgba(247, 208, 44, .18));
-      border-color: rgba(247, 208, 44, .60)
-    }
-
-    .t-Grass {
-      background: linear-gradient(135deg, rgba(122, 199, 76, .42), rgba(122, 199, 76, .18));
-      border-color: rgba(122, 199, 76, .60)
-    }
-
-    .t-Ice {
-      background: linear-gradient(135deg, rgba(150, 217, 214, .42), rgba(150, 217, 214, .18));
-      border-color: rgba(150, 217, 214, .60)
-    }
-
-    .t-Fighting {
-      background: linear-gradient(135deg, rgba(194, 46, 40, .42), rgba(194, 46, 40, .18));
-      border-color: rgba(194, 46, 40, .60)
-    }
-
-    .t-Poison {
-      background: linear-gradient(135deg, rgba(163, 62, 161, .42), rgba(163, 62, 161, .18));
-      border-color: rgba(163, 62, 161, .60)
-    }
-
-    .t-Ground {
-      background: linear-gradient(135deg, rgba(226, 191, 101, .42), rgba(226, 191, 101, .18));
-      border-color: rgba(226, 191, 101, .60)
-    }
-
-    .t-Flying {
-      background: linear-gradient(135deg, rgba(169, 143, 243, .42), rgba(169, 143, 243, .18));
-      border-color: rgba(169, 143, 243, .60)
-    }
-
-    .t-Psychic {
-      background: linear-gradient(135deg, rgba(249, 85, 135, .42), rgba(249, 85, 135, .18));
-      border-color: rgba(249, 85, 135, .60)
-    }
-
-    .t-Bug {
-      background: linear-gradient(135deg, rgba(166, 185, 26, .42), rgba(166, 185, 26, .18));
-      border-color: rgba(166, 185, 26, .60)
-    }
-
-    .t-Rock {
-      background: linear-gradient(135deg, rgba(182, 161, 54, .42), rgba(182, 161, 54, .18));
-      border-color: rgba(182, 161, 54, .60)
-    }
-
-    .t-Ghost {
-      background: linear-gradient(135deg, rgba(115, 87, 151, .42), rgba(115, 87, 151, .18));
-      border-color: rgba(115, 87, 151, .60)
-    }
-
-    .t-Dragon {
-      background: linear-gradient(135deg, rgba(111, 53, 252, .42), rgba(111, 53, 252, .18));
-      border-color: rgba(111, 53, 252, .60)
-    }
-
-    .t-Dark {
-      background: linear-gradient(135deg, rgba(112, 87, 70, .42), rgba(112, 87, 70, .18));
-      border-color: rgba(112, 87, 70, .60)
-    }
-
-    .t-Steel {
-      background: linear-gradient(135deg, rgba(183, 183, 206, .42), rgba(183, 183, 206, .18));
-      border-color: rgba(183, 183, 206, .60)
-    }
-
-    .t-Fairy {
-      background: linear-gradient(135deg, rgba(214, 133, 173, .42), rgba(214, 133, 173, .18));
-      border-color: rgba(214, 133, 173, .60)
-    }
+    .t-Normal { background: linear-gradient(135deg, rgba(168,167,122,.42), rgba(168,167,122,.18)); border-color: rgba(168,167,122,.60) }
+    .t-Fire { background: linear-gradient(135deg, rgba(238,129,48,.42), rgba(238,129,48,.18)); border-color: rgba(238,129,48,.60) }
+    .t-Water { background: linear-gradient(135deg, rgba(99,144,240,.42), rgba(99,144,240,.18)); border-color: rgba(99,144,240,.60) }
+    .t-Electric { background: linear-gradient(135deg, rgba(247,208,44,.42), rgba(247,208,44,.18)); border-color: rgba(247,208,44,.60) }
+    .t-Grass { background: linear-gradient(135deg, rgba(122,199,76,.42), rgba(122,199,76,.18)); border-color: rgba(122,199,76,.60) }
+    .t-Ice { background: linear-gradient(135deg, rgba(150,217,214,.42), rgba(150,217,214,.18)); border-color: rgba(150,217,214,.60) }
+    .t-Fighting { background: linear-gradient(135deg, rgba(194,46,40,.42), rgba(194,46,40,.18)); border-color: rgba(194,46,40,.60) }
+    .t-Poison { background: linear-gradient(135deg, rgba(163,62,161,.42), rgba(163,62,161,.18)); border-color: rgba(163,62,161,.60) }
+    .t-Ground { background: linear-gradient(135deg, rgba(226,191,101,.42), rgba(226,191,101,.18)); border-color: rgba(226,191,101,.60) }
+    .t-Flying { background: linear-gradient(135deg, rgba(169,143,243,.42), rgba(169,143,243,.18)); border-color: rgba(169,143,243,.60) }
+    .t-Psychic { background: linear-gradient(135deg, rgba(249,85,135,.42), rgba(249,85,135,.18)); border-color: rgba(249,85,135,.60) }
+    .t-Bug { background: linear-gradient(135deg, rgba(166,185,26,.42), rgba(166,185,26,.18)); border-color: rgba(166,185,26,.60) }
+    .t-Rock { background: linear-gradient(135deg, rgba(182,161,54,.42), rgba(182,161,54,.18)); border-color: rgba(182,161,54,.60) }
+    .t-Ghost { background: linear-gradient(135deg, rgba(115,87,151,.42), rgba(115,87,151,.18)); border-color: rgba(115,87,151,.60) }
+    .t-Dragon { background: linear-gradient(135deg, rgba(111,53,252,.42), rgba(111,53,252,.18)); border-color: rgba(111,53,252,.60) }
+    .t-Dark { background: linear-gradient(135deg, rgba(112,87,70,.42), rgba(112,87,70,.18)); border-color: rgba(112,87,70,.60) }
+    .t-Steel { background: linear-gradient(135deg, rgba(183,183,206,.42), rgba(183,183,206,.18)); border-color: rgba(183,183,206,.60) }
+    .t-Fairy { background: linear-gradient(135deg, rgba(214,133,173,.42), rgba(214,133,173,.18)); border-color: rgba(214,133,173,.60) }
   </style>
 </head>
 
@@ -624,19 +509,16 @@
           </svg>
         </span>
         <h1>Pokémon Periodic Table</h1>
-        <span class="version-pill">v1.1.0</span>
+        <span class="version-pill">v1.1.1</span>
       </div>
       <div class="search">
         <span class="search-icon">
           <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" fill="white" viewBox="0 0 24 24">
-            <path
-              d="M10 2a8 8 0 105.293 14.293l4.854 4.854 1.414-1.414-4.854-4.854A8 8 0 0010 2zm0 2a6 6 0 110 12 6 6 0 010-12z" />
+            <path d="M10 2a8 8 0 105.293 14.293l4.854 4.854 1.414-1.414-4.854-4.854A8 8 0 0010 2zm0 2a6 6 0 110 12 6 6 0 010-12z" />
           </svg>
         </span>
         <input id="q" placeholder="Search element or Pokémon" aria-label="Search" />
       </div>
-
-
     </div>
   </header>
 
@@ -650,22 +532,19 @@
     <small>© 2025 Ha Bach Viet. All rights reserved.</small>
     <div class="footer-icons">
       <!-- Instagram -->
-      <a href="https://www.instagram.com/bobbhaa_/" target="_blank" class="icon-box">
+      <a href="https://www.instagram.com/bobbhaa_/" target="_blank" class="icon-box" aria-label="Instagram">
         <svg xmlns="http://www.w3.org/2000/svg" fill="white" viewBox="0 0 448 512" width="20" height="20">
-          <path
-            d="M224.1 141c-63.6 0-114.9 51.3-114.9 114.9S160.5 370.9 224.1 370.9 339 319.6 339 255.9 287.7 141 224.1 141zm0 189.6c-41.2 0-74.7-33.4-74.7-74.7S182.9 181.2 224.1 181.2 298.8 214.6 298.8 255.9s-33.5 74.7-74.7 74.7zm146.4-194.3c0 14.9-12 26.8-26.8 26.8-14.9 0-26.8-12-26.8-26.8s12-26.8 26.8-26.8c14.8 0 26.8 12 26.8 26.8zm76.1 27.2c-1.7-35.9-9.9-67.7-36.2-93.9-26.2-26.2-58-34.4-93.9-36.2-37-2.1-147.9-2.1-184.9 0-35.8 1.7-67.6 9.9-93.9 36.1s-34.5 58-36.2 93.9c-2.1 37-2.1 147.9 0 184.9 1.7 35.9 9.9 67.7 36.2 93.9s58 34.4 93.9 36.2c37 2.1 147.9 2.1 184.9 0 35.9-1.7 67.7-9.9 93.9-36.2 26.2-26.2 34.4-58 36.2-93.9 2.1-37 2.1-147.8 0-184.8zM398.8 388c-7.8 19.6-22.9 34.7-42.6 42.6-29.5 11.7-99.5 9-132.1 9s-102.7 2.6-132.1-9c-19.6-7.8-34.7-22.9-42.6-42.6-11.7-29.5-9-99.5-9-132.1s-2.6-102.7 9-132.1c7.8-19.6 22.9-34.7 42.6-42.6 29.5-11.7 99.5-9 132.1-9s102.7-2.6 132.1 9c19.6 7.8 34.7 22.9 42.6 42.6 11.7 29.5 9 99.5 9 132.1s2.7 102.7-9 132.1z" />
+          <path d="M224.1 141c-63.6 0-114.9 51.3-114.9 114.9S160.5 370.9 224.1 370.9 339 319.6 339 255.9 287.7 141 224.1 141zm0 189.6c-41.2 0-74.7-33.4-74.7-74.7S182.9 181.2 224.1 181.2 298.8 214.6 298.8 255.9s-33.5 74.7-74.7 74.7zm146.4-194.3c0 14.9-12 26.8-26.8 26.8-14.9 0-26.8-12-26.8-26.8s12-26.8 26.8-26.8c14.8 0 26.8 12 26.8 26.8zm76.1 27.2c-1.7-35.9-9.9-67.7-36.2-93.9-26.2-26.2-58-34.4-93.9-36.2-37-2.1-147.9-2.1-184.9 0-35.8 1.7-67.6 9.9-93.9 36.1s-34.5 58-36.2 93.9c-2.1 37-2.1 147.9 0 184.9 1.7 35.9 9.9 67.7 36.2 93.9s58 34.4 93.9 36.2c37 2.1 147.9 2.1 184.9 0 35.9-1.7 67.7-9.9 93.9-36.2 26.2-26.2 34.4-58 36.2-93.9 2.1-37 2.1-147.8 0-184.8zM398.8 388c-7.8 19.6-22.9 34.7-42.6 42.6-29.5 11.7-99.5 9-132.1 9s-102.7 2.6-132.1-9c-19.6-7.8-34.7-22.9-42.6-42.6-11.7-29.5-9-99.5-9-132.1s-2.6-102.7 9-132.1c7.8-19.6 22.9-34.7 42.6-42.6 29.5-11.7 99.5-9 132.1-9s102.7-2.6 132.1 9c19.6 7.8 34.7 22.9 42.6 42.6 11.7 29.5 9 99.5 9 132.1s2.7 102.7-9 132.1z" />
         </svg>
       </a>
 
       <!-- GitHub -->
-      <a href="https://github.com/viethaa/pokemon-periodic-table" target="_blank" class="icon-box">
+      <a href="https://github.com/viethaa/pokemon-periodic-table" target="_blank" class="icon-box" aria-label="GitHub">
         <svg xmlns="http://www.w3.org/2000/svg" fill="white" viewBox="0 0 24 24" width="20" height="20">
-          <path
-            d="M12 .5C5.37.5 0 5.87 0 12.5c0 5.3 3.44 9.79 8.2 11.39c.6.11.82-.26.82-.58v-2.16c-3.34.73-4.04-1.61-4.04-1.61c-.55-1.4-1.34-1.77-1.34-1.77c-1.09-.75.08-.73.08-.73c1.2.09 1.83 1.23 1.83 1.23c1.07 1.83 2.8 1.3 3.49.99c.11-.78.42-1.3.76-1.6c-2.67-.31-5.47-1.34-5.47-5.97c0-1.32.47-2.4 1.24-3.25c-.12-.31-.54-1.55.12-3.23c0 0 1.01-.32 3.3 1.24a11.44 11.44 0 0 1 6 0c2.29-1.56 3.3-1.24 3.3-1.24c.66 1.68.24 2.92.12 3.23c.77.85 1.24 1.93 1.24 3.25c0 4.64-2.81 5.66-5.49 5.97c.43.37.81 1.1.81 2.23v3.3c0 .32.22.69.82.58A12 12 0 0 0 24 12.5C24 5.87 18.63.5 12 .5z" />
+          <path d="M12 .5C5.37.5 0 5.87 0 12.5c0 5.3 3.44 9.79 8.2 11.39c.6.11.82-.26.82-.58v-2.16c-3.34.73-4.04-1.61-4.04-1.61c-.55-1.4-1.34-1.77-1.34-1.77c-1.09-.75.08-.73.08-.73c1.2.09 1.83 1.23 1.83 1.23c1.07 1.83 2.8 1.3 3.49.99c.11-.78.42-1.3.76-1.6c-2.67-.31-5.47-1.34-5.47-5.97c0-1.32.47-2.4 1.24-3.25c-.12-.31-.54-1.55.12-3.23c0 0 1.01-.32 3.3 1.24a11.44 11.44 0 0 1 6 0c2.29-1.56 3.3-1.24 3.3-1.24c.66 1.68.24 2.92.12 3.23c.77.85 1.24 1.93 1.24 3.25c0 4.64-2.81 5.66-5.49 5.97c.43.37.81 1.1.81 2.23v3.3c0 .32.22.69.82.58A12 12 0 0 0 24 12.5C24 5.87 18.63.5 12 .5z" />
         </svg>
       </a>
     </div>
-
   </footer>
 
   <script>
@@ -804,6 +683,21 @@
       actin: 'var(--family-actin)'
     };
 
+    // DARKER per-family gradient colors (start, end)
+    const FAMILY_GRADIENTS = {
+      alkali: ['#b21e35', '#3a0a0a'],        // deep crimson → dark maroon
+      alkaline: ['#a8681e', '#2a1505'],      // amber-brown → espresso
+      transition: ['#1f4d6d', '#0a1b26'],    // steel blue → navy-black
+      post: ['#1d5e57', '#07211e'],          // teal → near-black green
+      metalloid: ['#4a5d1f', '#151d0a'],     // olive → deep forest
+      nonmetal: ['#6b7480', '#171a1f'],      // slate → charcoal
+      halogen: ['#c08b1a', '#221703'],       // toxic gold → black coffee
+      noble: ['#503a8b', '#150f26'],         // regal purple → midnight
+      lanth: ['#4d3a73', '#171227'],         // muted violet → black violet
+      actin: ['#5a2d72', '#160b21']          // plum → obsidian
+    };
+    function getFamilyGradient(f) { return FAMILY_GRADIENTS[f] || ['#0f1623', '#0a0f17']; }
+
     // helpers
     function parseCSV(txt) {
       const [header, ...rows] = txt.trim().split(/\r?\n+/);
@@ -919,7 +813,7 @@
       cell.addEventListener('focusin', load, { once: true });
     }
 
-    // responsive fit (width-based ONLY – preserves original card sizing)
+    // responsive fit
     function fitGrid() {
       const cols = 18; const pad = 32;
       const base = Math.min(window.innerWidth, 1280) - pad;
@@ -935,18 +829,15 @@
     }
     window.addEventListener('resize', fitGrid);
 
-    // === Column numbers ===
+    // Column numbers
     function addColumnNumbers(container) {
-      // clear old
       container.querySelectorAll('.colnum').forEach(n => n.remove());
-      // map col -> topmost cell (smallest period)
       const cells = Array.from(container.querySelectorAll('.cell'));
       const byCol = new Map();
       cells.forEach(c => {
         const col = +c.dataset.col; const per = +c.dataset.per;
         if (!byCol.has(col) || per < byCol.get(col).per) { byCol.set(col, { per, cell: c }); }
       });
-      // create badges
       for (const [col, info] of byCol.entries()) {
         const badge = document.createElement('div');
         badge.className = 'colnum';
@@ -955,9 +846,9 @@
       }
     }
 
-    // render
     const mainGridEl = document.getElementById('ptable');
     const fGridEl = document.getElementById('fblock');
+
     function render(list = ELEMENTS) {
       mainGridEl.innerHTML = '';
       fGridEl.innerHTML = '';
@@ -971,7 +862,9 @@
         cell.style.gridRow = el.period;
         cell.dataset.col = el.group;
         cell.dataset.per = el.period;
-        cell.style.setProperty('--fc', getFamilyColor(el.family));
+        const [g1, g2] = getFamilyGradient(el.family);
+        cell.style.setProperty('--g1', g1);
+        cell.style.setProperty('--g2', g2);
         cell.innerHTML = `
       <div class="inner">
         <div class="meta"><span class="z">${el.weight}</span></div>
@@ -997,13 +890,15 @@
         attachTypeLoader(cell, pk.dex);
       });
 
-      // f-block rows
+      // Lanthanides
       const lanths = list.filter(e => e.family === 'lanth');
       lanths.forEach((el, i) => {
         const pk = getPokemonFor(el, i);
         const cell = document.createElement('button');
         cell.className = 'cell';
-        cell.style.setProperty('--fc', getFamilyColor(el.family));
+        const [g1, g2] = getFamilyGradient(el.family);
+        cell.style.setProperty('--g1', g1);
+        cell.style.setProperty('--g2', g2);
         cell.style.gridColumn = (i + 4);
         cell.dataset.col = (i + 4);
         cell.dataset.per = 8; // virtual row beneath main table
@@ -1033,12 +928,15 @@
         attachTypeLoader(cell, pk.dex);
       });
 
+      // Actinides
       const actins = list.filter(e => e.family === 'actin');
       actins.forEach((el, i) => {
         const pk = getPokemonFor(el, i);
         const cell = document.createElement('button');
         cell.className = 'cell';
-        cell.style.setProperty('--fc', getFamilyColor(el.family));
+        const [g1, g2] = getFamilyGradient(el.family);
+        cell.style.setProperty('--g1', g1);
+        cell.style.setProperty('--g2', g2);
         cell.style.gridColumn = (i + 4);
         cell.dataset.col = (i + 4);
         cell.dataset.per = 9; // virtual row beneath lanths
@@ -1068,7 +966,6 @@
         attachTypeLoader(cell, pk.dex);
       });
 
-      // add column numbers for the main grid
       addColumnNumbers(mainGridEl);
     }
 
