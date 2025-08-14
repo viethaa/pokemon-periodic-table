@@ -104,18 +104,11 @@
       display: flex;
       align-items: center;
       justify-content: center;
-
-      /* Draw BOTH the fill and the border with layered backgrounds */
       background:
-        /* inner fill */
         linear-gradient(160deg, var(--g1, #0f1623), var(--g2, #0a0f17)) padding-box,
-        /* border ring (white gradient) */
         linear-gradient(135deg, rgba(255, 255, 255, 0.66), rgba(255, 255, 255, 0.50)) border-box;
-
-      /* Transparent border lets the border-box layer show through */
       border: 1px solid transparent;
       border-radius: 10px;
-
       height: 100%;
       min-height: 0;
       padding: 10px;
@@ -131,7 +124,6 @@
       transform: translateY(-2px);
       z-index: 5;
       filter: saturate(1.08);
-      /* Slightly brighten the ring on hover */
       background:
         linear-gradient(160deg, var(--g1, #0f1623), var(--g2, #0a0f17)) padding-box,
         linear-gradient(135deg, rgba(255, 255, 255, 0.85), rgba(255, 255, 255, 0.28)) border-box;
@@ -212,19 +204,15 @@
       display: inline-flex;
       align-items: center;
       justify-content: center;
-
       padding: var(--colnum-pad-y) var(--colnum-pad-x);
       border-radius: var(--colnum-radius);
       border: 1px solid transparent;
       overflow: hidden;
-
       background:
         linear-gradient(#0b0f14, #0b0f14) padding-box,
         linear-gradient(#ffffff, #ffffff) border-box;
-
       backdrop-filter: saturate(120%) blur(6px);
       -webkit-backdrop-filter: saturate(120%) blur(6px);
-
       box-shadow: 0 6px 20px rgba(0, 0, 0, .25);
       font-size: 12px;
       font-weight: 800;
@@ -390,9 +378,7 @@
       height: 36px;
       border-radius: 8px;
       border: 1px solid transparent;
-      background:
-        linear-gradient(#0b0f14, #0b0f14) padding-box,
-        linear-gradient(180deg, #ffffff, #e9eef7) border-box;
+      background: linear-gradient(#0b0f14, #0b0f14) padding-box, linear-gradient(180deg, #ffffff, #e9eef7) border-box;
       transition: transform 0.2s ease;
     }
 
@@ -454,25 +440,35 @@
       margin: 6px 0 10px
     }
 
+    /* *** Stats grid with CENTER sprite column *** */
     .hovercard .grid {
       display: grid;
-      grid-template-columns: 1fr 1fr;
+      grid-template-columns: 1fr auto 1fr;
+      /* left stat | sprite | right stat */
       gap: 8px 14px;
-      font-size: 12px
+      font-size: 12px;
+      align-items: center;
     }
 
-    .hovercard .typerow {
-      grid-column: 1/-1;
-      text-align: center
-    }
-
-    .hovercard .typerow small {
+    .hovercard .grid .box small {
+      color: var(--muted);
       display: block;
-      margin-bottom: 4px
+      margin-bottom: 2px;
     }
 
-    .hovercard small {
-      color: var(--muted)
+    /* Middle animated sprite that fits between stat boxes */
+    .sprite-anim {
+      grid-column: 2;
+      /* center column */
+      grid-row: 1 / 3;
+      /* sit between first two rows of stats */
+      width: 56px;
+      height: 56px;
+      image-rendering: pixelated;
+      filter: drop-shadow(0 6px 12px rgba(0, 0, 0, .45));
+      justify-self: center;
+      align-self: center;
+      pointer-events: none;
     }
 
     /* type pills */
@@ -619,6 +615,7 @@
     <div class="ptable" id="fblock" style="margin-top: calc(var(--gap) * 1.5)"></div>
   </main>
 
+  <!-- FOOTER restored -->
   <footer>
     <div class="footrule"></div>
     <small>© 2025 Ha Bach Viet. All rights reserved.</small>
@@ -629,8 +626,6 @@
             d="M224.1 141c-63.6 0-114.9 51.3-114.9 114.9S160.5 370.9 224.1 370.9 339 319.6 339 255.9 287.7 141 224.1 141zm0 189.6c-41.2 0-74.7-33.4-74.7-74.7S182.9 181.2 224.1 181.2 298.8 214.6 298.8 255.9s-33.5 74.7-74.7 74.7zm146.4-194.3c0 14.9-12 26.8-26.8 26.8-14.9 0-26.8-12-26.8-26.8s12-26.8 26.8-26.8c14.8 0 26.8 12 26.8 26.8zm76.1 27.2c-1.7-35.9-9.9-67.7-36.2-93.9-26.2-26.2-58-34.4-93.9-36.2-37-2.1-147.9-2.1-184.9 0-35.8 1.7-67.6 9.9-93.9 36.1s-34.5 58-36.2 93.9c-2.1 37-2.1 147.9 0 184.9 1.7 35.9 9.9 67.7 36.2 93.9s58 34.4 93.9 36.2c37 2.1 147.9 2.1 184.9 0 35.9-1.7 67.7-9.9 93.9-36.2 26.2-26.2 34.4-58 36.2-93.9 2.1-37 2.1-147.8 0-184.8zM398.8 388c-7.8 19.6-22.9 34.7-42.6 42.6-29.5 11.7-99.5 9-132.1 9s-102.7 2.6-132.1-9c-19.6-7.8-34.7-22.9-42.6-42.6-11.7-29.5-9-99.5-9-132.1s-2.6-102.7 9-132.1c7.8-19.6 22.9-34.7 42.6-42.6 29.5-11.7 99.5-9 132.1-9s102.7-2.6 132.1 9c19.6 7.8 34.7 22.9 42.6 42.6 11.7 29.5 9 99.5 9 132.1s2.7 102.7-9 132.1z" />
         </svg>
       </a>
-
-
 
       <!-- GitHub -->
       <a href="https://github.com/viethaa/pokemon-periodic-table" target="_blank" class="icon-box" aria-label="GitHub">
@@ -854,8 +849,13 @@
       lanth: 'Rare earths → cosmic/psychic/ancient vibes.',
       actin: 'Radioactive series → ghostly/unstable power.'
     };
+    function spriteUrl(id) {
+      return `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/${id}.gif`;
+    }
 
-    function spriteUrl(id) { return `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/${id}.png`; }
+    function animSpriteUrl(id) {
+      return `https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/versions/generation-v/black-white/animated/${id}.gif`;
+    }
 
     // build unique assignments
     const DEX_POOL = Array.from({ length: 1025 }, (_, i) => i + 1);
@@ -979,7 +979,9 @@
           <span class="mass">${el.weight}</span>
           <span class="anum">${el.z}</span>
         </div>
-        <img class="sprite" alt="sprite" loading="lazy" decoding="async" src="${spriteUrl(pk.dex)}" onerror="this.onerror=null; this.src='https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${pk.dex}.png'"/>
+        <img class="sprite" alt="sprite" loading="lazy" decoding="async"
+             src="${spriteUrl(pk.dex)}"
+             onerror="this.onerror=null; this.src='https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${pk.dex}.png'"/>
         <span class="ename" title="${el.name}">${el.symbol}</span>
       </div>
       <div class="hovercard">
@@ -988,14 +990,50 @@
           <span class="chip">${el.symbol}</span>
         </div>
         <div class="divider"></div>
+
+        <!-- 3-column stats grid: left stat | CENTER SPRITE | right stat -->
         <div class="grid">
-          <div><small>Atomic #</small><div>${el.z}</div></div>
-          <div><small>Period</small><div>${el.period}</div></div>
-          <div><small>Group</small><div>${el.group}</div></div>
-          <div><small>Family</small><div>${FAMILY_LABELS[el.family] || el.family}</div></div>
-          <div style="grid-column:1/-1"><small>Pokémon</small><div>${pk.name || ('Dex ' + pk.dex)}</div></div>
-          <div class="typerow" style="grid-column:1/-1"><small>Type</small><div class="typebar" data-dex="${pk.dex}"><span class="type">Loading…</span></div></div>
-          <div style="grid-column:1/-1"><small>Why Pokémon</small><div>${(POKE_OVERRIDES[el.symbol]?.reason) || ('Matched by family: ' + el.family + '. ' + (FAMILY_REASON[el.family] || ''))}</div></div>
+
+          <!-- Row 1 -->
+          <div class="box" style="grid-column:1">
+            <small>Atomic #</small><div>${el.z}</div>
+          </div>
+          <div class="box" style="grid-column:3">
+            <small>Period</small><div>${el.period}</div>
+          </div>
+
+          <!-- Middle animated sprite sits between row1 and row2 -->
+          <img class="sprite-anim"
+               alt="Animated sprite"
+               loading="lazy"
+               decoding="async"
+               src="${animSpriteUrl(pk.dex)}"
+               onerror="this.onerror=null; this.src='${spriteUrl(pk.dex)}'"/>
+
+          <!-- Row 2 -->
+          <div class="box" style="grid-column:1">
+            <small>Group</small><div>${el.group}</div>
+          </div>
+          <div class="box" style="grid-column:3">
+            <small>Family</small><div>${FAMILY_LABELS[el.family] || el.family}</div>
+          </div>
+
+          <!-- Full-width rows -->
+          <div class="box" style="grid-column:1 / -1">
+            <small>Pokémon</small><div>${pk.name || ('Dex ' + pk.dex)}</div>
+          </div>
+
+          <div class="typerow box" style="grid-column:1 / -1; text-align:center">
+            <small>Type</small>
+            <div class="typebar" data-dex="${pk.dex}">
+              <span class="type">Loading…</span>
+            </div>
+          </div>
+
+          <div class="box" style="grid-column:1 / -1">
+            <small>Why Pokémon</small>
+            <div>${(POKE_OVERRIDES[el.symbol]?.reason) || ('Matched by family: ' + el.family + '. ' + (FAMILY_REASON[el.family] || ''))}</div>
+          </div>
         </div>
       </div>`;
         mainGridEl.appendChild(cell);
@@ -1020,7 +1058,9 @@
           <span class="mass">${el.weight}</span>
           <span class="anum">${el.z}</span>
         </div>
-        <img class="sprite" alt="sprite" loading="lazy" decoding="async" src="${spriteUrl(pk.dex)}" onerror="this.onerror=null; this.src='https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${pk.dex}.png'"/>
+        <img class="sprite" alt="sprite" loading="lazy" decoding="async"
+             src="${spriteUrl(pk.dex)}"
+             onerror="this.onerror=null; this.src='https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${pk.dex}.png'"/>
         <span class="ename" title="${el.name}">${el.symbol}</span>
       </div>
       <div class="hovercard">
@@ -1029,14 +1069,21 @@
           <span class="chip">${el.symbol}</span>
         </div>
         <div class="divider"></div>
+
         <div class="grid">
-          <div><small>Atomic #</small><div>${el.z}</div></div>
-          <div><small>Period</small><div>${el.period}</div></div>
-          <div><small>Group</small><div>${el.group}</div></div>
-          <div><small>Family</small><div>${FAMILY_LABELS[el.family] || el.family}</div></div>
-          <div style="grid-column:1/-1"><small>Pokémon</small><div>${pk.name || ('Dex ' + pk.dex)}</div></div>
-          <div class="typerow" style="grid-column:1/-1"><small>Type</small><div class="typebar" data-dex="${pk.dex}"><span class="type">Loading…</span></div></div>
-          <div style="grid-column:1/-1"><small>Why Pokémon</small><div>${(POKE_OVERRIDES[el.symbol]?.reason) || ('Matched by family: ' + el.family + '. ' + (FAMILY_REASON[el.family] || ''))}</div></div>
+          <div class="box" style="grid-column:1"><small>Atomic #</small><div>${el.z}</div></div>
+          <div class="box" style="grid-column:3"><small>Period</small><div>${el.period}</div></div>
+
+          <img class="sprite-anim" alt="Animated sprite" loading="lazy" decoding="async"
+               src="${animSpriteUrl(pk.dex)}"
+               onerror="this.onerror=null; this.src='${spriteUrl(pk.dex)}'"/>
+
+          <div class="box" style="grid-column:1"><small>Group</small><div>${el.group}</div></div>
+          <div class="box" style="grid-column:3"><small>Family</small><div>${FAMILY_LABELS[el.family] || el.family}</div></div>
+
+          <div class="box" style="grid-column:1 / -1"><small>Pokémon</small><div>${pk.name || ('Dex ' + pk.dex)}</div></div>
+          <div class="typerow box" style="grid-column:1 / -1; text-align:center"><small>Type</small><div class="typebar" data-dex="${pk.dex}"><span class="type">Loading…</span></div></div>
+          <div class="box" style="grid-column:1 / -1"><small>Why Pokémon</small><div>${(POKE_OVERRIDES[el.symbol]?.reason) || ('Matched by family: ' + el.family + '. ' + (FAMILY_REASON[el.family] || ''))}</div></div>
         </div>
       </div>`;
         fGridEl.appendChild(cell);
@@ -1061,7 +1108,9 @@
           <span class="mass">${el.weight}</span>
           <span class="anum">${el.z}</span>
         </div>
-        <img class="sprite" alt="sprite" loading="lazy" decoding="async" src="${spriteUrl(pk.dex)}" onerror="this.onerror=null; this.src='https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${pk.dex}.png'"/>
+        <img class="sprite" alt="sprite" loading="lazy" decoding="async"
+             src="${spriteUrl(pk.dex)}"
+             onerror="this.onerror=null; this.src='https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/${pk.dex}.png'"/>
         <span class="ename" title="${el.name}">${el.symbol}</span>
       </div>
       <div class="hovercard">
@@ -1070,14 +1119,21 @@
           <span class="chip">${el.symbol}</span>
         </div>
         <div class="divider"></div>
+
         <div class="grid">
-          <div><small>Atomic #</small><div>${el.z}</div></div>
-          <div><small>Period</small><div>${el.period}</div></div>
-          <div><small>Group</small><div>${el.group}</div></div>
-          <div><small>Family</small><div>${FAMILY_LABELS[el.family] || el.family}</div></div>
-          <div style="grid-column:1/-1"><small>Pokémon</small><div>${pk.name || ('Dex ' + pk.dex)}</div></div>
-          <div class="typerow" style="grid-column:1/-1"><small>Type</small><div class="typebar" data-dex="${pk.dex}"><span class="type">Loading…</span></div></div>
-          <div style="grid-column:1/-1"><small>Why Pokémon</small><div>${(POKE_OVERRIDES[el.symbol]?.reason) || ('Matched by family: ' + el.family + '. ' + (FAMILY_REASON[el.family] || ''))}</div></div>
+          <div class="box" style="grid-column:1"><small>Atomic #</small><div>${el.z}</div></div>
+          <div class="box" style="grid-column:3"><small>Period</small><div>${el.period}</div></div>
+
+          <img class="sprite-anim" alt="Animated sprite" loading="lazy" decoding="async"
+               src="${animSpriteUrl(pk.dex)}"
+               onerror="this.onerror=null; this.src='${spriteUrl(pk.dex)}'"/>
+
+          <div class="box" style="grid-column:1"><small>Group</small><div>${el.group}</div></div>
+          <div class="box" style="grid-column:3"><small>Family</small><div>${FAMILY_LABELS[el.family] || el.family}</div></div>
+
+          <div class="box" style="grid-column:1 / -1"><small>Pokémon</small><div>${pk.name || ('Dex ' + pk.dex)}</div></div>
+          <div class="typerow box" style="grid-column:1 / -1; text-align:center"><small>Type</small><div class="typebar" data-dex="${pk.dex}"><span class="type">Loading…</span></div></div>
+          <div class="box" style="grid-column:1 / -1"><small>Why Pokémon</small><div>${(POKE_OVERRIDES[el.symbol]?.reason) || ('Matched by family: ' + el.family + '. ' + (FAMILY_REASON[el.family] || ''))}</div></div>
         </div>
       </div>`;
         fGridEl.appendChild(cell);
@@ -1095,7 +1151,10 @@
       const subset = ELEMENTS.filter(el => {
         const ov = POKE_OVERRIDES[el.symbol];
         const pnames = ov ? (ov.name || '').toLowerCase() : '';
-        return el.symbol.toLowerCase().includes(term) || el.name.toLowerCase().includes(term) || String(el.z).includes(term) || pnames.includes(term);
+        return el.symbol.toLowerCase().includes(term)
+          || el.name.toLowerCase().includes(term)
+          || String(el.z).includes(term)
+          || pnames.includes(term);
       });
       render(subset);
       fitGrid();
