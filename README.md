@@ -8,6 +8,23 @@
 
 ## Change Log
 
+### `v1.3.1` — Family Colors & Info
+#### 🌟 New Features
+- 🌈 **Family-Based Color Coding** — Elements are now color-coded by their chemical families (e.g., Alkali Metals, Transition Metals, etc.).
+- 🔬 **Element Family Information** — Added detailed family descriptions in the element info panel.
+
+#### 🪄 UI & Design Upgrades
+- 🎯 **Refined Hover Effects** — Improved readability and contrast with new color coding.
+
+#### 🐞 Bug Fixes
+- 🐛 Fixed color mismatches and minor hover interaction issues.
+
+<br>
+
+Visit now: [https://viethaa.github.io/pokemon-periodic-table/](url)
+
+#
+
 ### `v1.2.1` — Animated Pokémon Sprites
 #### 🎠 New Sprites
 - 🎮 **Animated Pokémon Sprites** — Added animated Pokémon sprites from `Gen IV`
