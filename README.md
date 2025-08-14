@@ -8,11 +8,33 @@
 
 ## Change Log
 
-### `v1.1.1` — File Structure
+### `v1.2.1` — Animated Pokémon Sprites
+#### 🎠 New Sprites
+- 🎮 **Animated Pokémon Sprites** — Added animated Pokémon sprites from `Gen IV`
+- ⚙️ **Toggle Button** — Added a toggle button to turn animated sprites on or off.
+
+#### 🎨 UI & Design Upgrades
+- 🧬 **Atomic Numbers** — Element information panel now displays atomic numbers when hovering.
+- 🖌 **Resized Sprites** — Redesigned Pokémon sprites to fit perfectly within element cards.
+- 🧹 **Improved Layout & Styling** — Cleaner spacing and consistent alignment.
+
+#### 🐞 Bug Fixes
+- 🐛 Fixed sprite display inconsistencies and animation glitches.
+
+<br>
+
+Visit now: [https://viethaa.github.io/pokemon-periodic-table/](url)
+
+#
+
+### `v1.1.1` — File Structures Update
 
 #### 📂 File Changes
 
 - ✨ **Seperated** code files into `HTML`, `CSS`, `JS` files.
+<br>
+
+Visit now: [https://viethaa.github.io/pokemon-periodic-table/](url)
 
 #
 
@@ -31,6 +53,10 @@
   - A link to the creator’s Instagram profile.
 
 - 💊 **Version Pill** – A sleek version indicator to easily track current app version (`v1.1.0`).
+
+<br>
+
+Visit now: [https://viethaa.github.io/pokemon-periodic-table/](url)
 
 #
 
@@ -55,6 +81,10 @@
 
 - 🧱 **Consistent Card Sizing** — No overlaps; clean grid with proper spacing.  
 
-- 💻 **Responsive Design** — Scales cleanly across desktop, tablet, and mobile.  
+- 💻 **Responsive Design** — Scales cleanly across desktop, tablet, and mobile.
+
+<br>
+
+Visit now: [https://viethaa.github.io/pokemon-periodic-table/](url)
 
 ---
