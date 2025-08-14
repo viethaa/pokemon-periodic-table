@@ -8,6 +8,14 @@
 
 ## Change Log
 
+### `v1.1.1` — File Structure
+
+#### 📂 File Changes
+
+- ✨ **Seperated** code files into `HTML`, `CSS`, `JS` files.
+
+#
+
 ### `v1.1.0` — UI Upgrades
 
 #### 🚀 Upgrades
